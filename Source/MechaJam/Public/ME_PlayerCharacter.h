@@ -28,14 +28,23 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* BodyMesh;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* ArmsMesh;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* LegsMesh;
+
+	UPROPERTY(EditAnywhere)
+	float Speed;
+
+	void MovementSide(float Value);
+	void LookUp(float Value);
+	void LookSide (float Value);
+
+	
 
 public:	
 	// Called every frame

@@ -4,6 +4,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Math/UnrealMathUtility.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 
@@ -23,12 +24,14 @@ AME_PlayerCharacter::AME_PlayerCharacter()
 	ArmsMesh -> SetupAttachment(BodyMesh);
 
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
-	SpringArmComp->SetupAttachment(LegsMesh);
+	SpringArmComp -> bUsePawnControlRotation = true;
+	SpringArmComp->SetupAttachment(RootComponent);
 	
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("Camera");
 	CameraComp -> SetupAttachment(SpringArmComp);
 
 	GetCharacterMovement()->GravityScale = 0.0f;
+	Speed = 10.0f;
 
 
 }
@@ -38,6 +41,51 @@ void AME_PlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AME_PlayerCharacter::MovementSide(float Value)
+{
+	const FVector Direction = GetActorRightVector() * Value * Speed;
+	AddActorWorldOffset(Direction);
+
+	const float CurrentRoll = LegsMesh->GetRelativeRotation().Roll;
+	const float NewRoll = CurrentRoll + Value * 0.2f;
+	const float ClampedRoll = FMath::Clamp(NewRoll, -20.0f,20.0f);
+	FRotator NewRotation (0.0f,0.0f, ClampedRoll);
+
+	if (Value == 0)
+	{
+		NewRotation.Roll = 0.0f;
+	}
+	LegsMesh->SetRelativeRotation(NewRotation);
+	
+}
+
+void AME_PlayerCharacter::LookUp(float Value)
+{
+	const float CameraInput = Value * 0.1f * -1;
+	AddControllerPitchInput(CameraInput);
+	
+	const FRotator CurrentRotation = ArmsMesh->GetRelativeRotation();
+	const float NewPitch = CurrentRotation.Pitch + Value * 0.5;
+	const float ClampedRotation = FMath::Clamp(NewPitch, 0.0f, 90.0f);
+	const FRotator NewRotation (ClampedRotation, 0.0f,0.0f);
+		
+	ArmsMesh->SetRelativeRotation(NewRotation);
+
+}
+
+void AME_PlayerCharacter::LookSide(float Value)
+{
+	const float CameraInput = Value * 0.1f;
+	AddControllerYawInput(CameraInput);
+	
+	const FRotator CurrentRotation = BodyMesh->GetRelativeRotation();
+	const float NewPitch = CurrentRotation.Yaw + Value * 0.25;
+	const float ClampedRotation = FMath::Clamp(NewPitch, -90.0f, 90.0f);
+	const FRotator NewRotation (0.0f, ClampedRotation,0.0f);
+		
+	BodyMesh->SetRelativeRotation(NewRotation);
 }
 
 // Called every frame
@@ -51,6 +99,11 @@ void AME_PlayerCharacter::Tick(float DeltaTime)
 void AME_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PlayerInputComponent->BindAxis("MouseY", this, &AME_PlayerCharacter::LookUp);
+	PlayerInputComponent->BindAxis("MouseX", this, &AME_PlayerCharacter::LookSide);
+	PlayerInputComponent->BindAxis("MovementSide", this, &AME_PlayerCharacter::MovementSide);
+
 
 }
 
