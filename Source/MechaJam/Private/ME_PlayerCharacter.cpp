@@ -45,18 +45,11 @@ void AME_PlayerCharacter::BeginPlay()
 
 void AME_PlayerCharacter::MovementSide(float Value)
 {
-	const FVector Direction = GetActorRightVector() * Value * Speed;
-	AddActorWorldOffset(Direction);
-
 	const float CurrentRoll = LegsMesh->GetRelativeRotation().Roll;
 	const float NewRoll = CurrentRoll + Value * 0.2f;
 	const float ClampedRoll = FMath::Clamp(NewRoll, -20.0f,20.0f);
 	FRotator NewRotation (0.0f,0.0f, ClampedRoll);
-
-	if (Value == 0)
-	{
-		NewRotation.Roll = 0.0f;
-	}
+	
 	LegsMesh->SetRelativeRotation(NewRotation);
 	
 }
