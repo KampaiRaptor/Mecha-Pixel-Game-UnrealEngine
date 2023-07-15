@@ -22,7 +22,18 @@ AME_Projectile::AME_Projectile()
 void AME_Projectile::BeginPlay()
 {
 	Super::BeginPlay();
+	DestroyAfterDelay(5.0f);
 	
+}
+
+void AME_Projectile::DestroyAfterDelay(float Delaytime)
+{
+	GetWorldTimerManager().SetTimer(TimerHandle_Destroy,this, &AME_Projectile::DestroySelf, Delaytime, false);
+}
+
+void AME_Projectile::DestroySelf()
+{
+	Destroy();
 }
 
 // Called every frame

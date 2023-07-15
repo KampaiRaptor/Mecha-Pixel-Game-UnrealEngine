@@ -3,14 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ME_DamageInterface.h"
 #include "GameFramework/Actor.h"
 #include "ME_Drone.generated.h"
 
 class UStaticMeshComponent;
 UCLASS()
-class MECHAJAM_API AME_Drone : public AActor
+class MECHAJAM_API AME_Drone : public AActor, public IME_DamageInterface
 {
 	GENERATED_BODY()
+
+	void DealDamage_Implementation(APawn* InstigatorPawn);
 	
 public:	
 	// Sets default values for this actor's properties

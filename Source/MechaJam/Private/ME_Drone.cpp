@@ -5,6 +5,11 @@
 #include "Components/StaticMeshComponent.h"
 
 
+void AME_Drone::DealDamage_Implementation(APawn* InstigatorPawn)
+{
+	Destroy();
+}
+
 // Sets default values
 AME_Drone::AME_Drone()
 {
