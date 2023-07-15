@@ -2,6 +2,7 @@
 
 #include "ME_PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/ArrowComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Math/UnrealMathUtility.h"
@@ -34,6 +35,12 @@ AME_PlayerCharacter::AME_PlayerCharacter()
 	Speed = 10.0f;
 
 
+	ArrowLeft = CreateDefaultSubobject<UArrowComponent>("ArrowLeft");
+	ArrowLeft->SetupAttachment(ArmsMesh);
+
+	ArrowRight = CreateDefaultSubobject<UArrowComponent>("ArrowRight");
+	ArrowRight->SetupAttachment(ArmsMesh);
+
 }
 
 // Called when the game starts or when spawned
@@ -43,6 +50,24 @@ void AME_PlayerCharacter::BeginPlay()
 	
 }
 
+void AME_PlayerCharacter::TriggerShooting()
+{
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	
+	const FVector ArrowLeftLocation = ArrowLeft->GetComponentLocation();
+	const FRotator ArrowLeftRotation = ArrowLeft->GetComponentRotation();
+	const FTransform ArrowLeftTransform = FTransform(ArrowLeftRotation,ArrowLeftLocation);
+
+	const FVector ArrowRightLocation = ArrowRight->GetComponentLocation();
+	const FRotator ArrowRightRotation = ArrowRight->GetComponentRotation();
+	const FTransform ArrowRightTransform = FTransform(ArrowRightRotation,ArrowRightLocation);
+
+	
+	GetWorld()->SpawnActor<AActor>(ProjectileClass, ArrowLeftTransform, SpawnParams);
+	GetWorld()->SpawnActor<AActor>(ProjectileClass, ArrowRightTransform, SpawnParams);
+}
+
 void AME_PlayerCharacter::MovementSide(float Value)
 {
 	const float CurrentRoll = LegsMesh->GetRelativeRotation().Roll;
@@ -50,7 +75,7 @@ void AME_PlayerCharacter::MovementSide(float Value)
 	const float ClampedRoll = FMath::Clamp(NewRoll, -20.0f,20.0f);
 	FRotator NewRotation (0.0f,0.0f, ClampedRoll);
 	
-	LegsMesh->SetRelativeRotation(NewRotation);
+	//LegsMesh->SetRelativeRotation(NewRotation); Not using
 	
 }
 
@@ -96,6 +121,8 @@ void AME_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAxis("MouseY", this, &AME_PlayerCharacter::LookUp);
 	PlayerInputComponent->BindAxis("MouseX", this, &AME_PlayerCharacter::LookSide);
 	PlayerInputComponent->BindAxis("MovementSide", this, &AME_PlayerCharacter::MovementSide);
+	PlayerInputComponent->BindAction("Shooting",IE_Pressed,this, &AME_PlayerCharacter::TriggerShooting);
+
 
 
 }

@@ -4,28 +4,31 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ME_Projectile.generated.h"
+#include "ME_Drone.generated.h"
 
-class UProjectileMovementComponent;
+class UStaticMeshComponent;
 UCLASS()
-class MECHAJAM_API AME_Projectile : public AActor
+class MECHAJAM_API AME_Drone : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AME_Projectile();
+	AME_Drone();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere)
-	UProjectileMovementComponent* ProjectileMovementComp;
+	UStaticMeshComponent* DroneMesh;
 
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* ProjectileMesh;
-	
+	UFUNCTION()
+	void MoveTowardsTarget();
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float Speed;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

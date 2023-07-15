@@ -37,12 +37,22 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* LegsMesh;
 
+	UPROPERTY(VisibleAnywhere)
+	UArrowComponent* ArrowLeft;
+	
+	UPROPERTY(VisibleAnywhere)
+	UArrowComponent* ArrowRight;
+
 	UPROPERTY(EditAnywhere)
 	float Speed;
+
+	UPROPERTY(EditAnywhere);
+	TSubclassOf<AActor> ProjectileClass;
 
 	void MovementSide(float Value);
 	void LookUp(float Value);
 	void LookSide (float Value);
+	void TriggerShooting();
 
 	
 
