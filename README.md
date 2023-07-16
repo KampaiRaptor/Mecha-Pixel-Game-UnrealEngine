@@ -11,9 +11,9 @@ Enjoy!
 
 ## Gameplay
 
-![ezgif com-optimize (4)](https://github.com/KampaiRaptor/MechaJam-UnrealEngine/assets/120315901/f73c689f-cb30-4aec-8fd1-7c2c8ee79b7f)
+![ezgif com-optimize (4)](https://github.com/KampaiRaptor/Mecha-Pixel-Game-UnrealEngine/assets/120315901/06083f2f-4096-4704-981c-a7d29e02746b)
 
-![ezgif com-optimize (5)](https://github.com/KampaiRaptor/MechaJam-UnrealEngine/assets/120315901/9ef0b37d-d4aa-4a63-a6fe-a996b572a065)
+![ezgif com-optimize (5)](https://github.com/KampaiRaptor/Mecha-Pixel-Game-UnrealEngine/assets/120315901/e9d6d452-4ba5-43e4-aebe-a2d2925004a5)
 
 
 ## Credits 
